@@ -79,8 +79,6 @@ ZmCalColView.MIN_COLUMN_WIDTH = 120;
 // max number of all day appts before we turn on vertical scrollbars
 ZmCalColView.MAX_ALLDAY_APPTS = 4;
 
-ZmCalColView.HALF_HOUR_HEIGHT = 21;
-
 ZmCalColView._OPACITY_APPT_NORMAL = 100;
 ZmCalColView._OPACITY_APPT_DECLINED = 20;
 ZmCalColView._OPACITY_APPT_TENTATIVE = 60;
@@ -106,6 +104,7 @@ ZmCalColView._APPT_Y_FUDGE = -1; // ditto
 ZmCalColView._APPT_WIDTH_FUDGE = (AjxEnv.isIE ? 0 : 0); // due to border stuff
 ZmCalColView._APPT_HEIGHT_FUDGE = (AjxEnv.isIE ? 0 : 0); // ditto
 
+ZmCalColView._SNAP_MINUTES = 15;
 ZmCalColView._HOUR_HEIGHT = 84;
 ZmCalColView._HALF_HOUR_HEIGHT = ZmCalColView._HOUR_HEIGHT/2;
 ZmCalColView._15_MINUTE_HEIGHT = ZmCalColView._HOUR_HEIGHT/4;
@@ -196,7 +195,7 @@ function() {
 
 	var bounds = this._getBoundsForDate(this._date,  AjxDateUtil.MSEC_PER_HALF_HOUR);
 	if (bounds == null) return;
-	var snap = this._snapXY(bounds.x, bounds.y, 30);
+	var snap = this._snapXY(bounds.x, bounds.y, ZmCalColView._SNAP_MINUTES);
 	if (snap == null) return;
 
 	Dwt.setLocation(e, snap.x, snap.y);
@@ -1765,9 +1764,9 @@ function(dayIndex, workingHourIndex){
         endMin = (endTime%100)/15,
         startWorkingHour = 2 * Math.floor(startTime/100),
         endWorkingHour = 2 * Math.floor(endTime/100),
-        fifteenMinHeight = ZmCalColView.HALF_HOUR_HEIGHT/2,
-        topPosition = startWorkingHour*ZmCalColView.HALF_HOUR_HEIGHT,
-        bottomPosition = endWorkingHour*ZmCalColView.HALF_HOUR_HEIGHT,
+        fifteenMinHeight = ZmCalColView._HALF_HOUR_HEIGHT/2,
+        topPosition = startWorkingHour*ZmCalColView._HALF_HOUR_HEIGHT,
+        bottomPosition = endWorkingHour*ZmCalColView._HALF_HOUR_HEIGHT,
         workingDivHeight = bottomPosition - topPosition;//duration*halfHourHeight;
     return {
         topPosition : topPosition,
@@ -2324,8 +2323,8 @@ function(data) {
 
         // Adjust apptOffset.x to be the offset from the clicked on column.  Then create the
         // start snap using this offset (so that start column of a multi-day is tracked).
-        var leftSnap = this._snapXY(data.apptX, data.apptY, 15);
-        var colSnap  = this._snapXY(data.apptX + data.apptOffset.x, data.apptY, 15);
+        var leftSnap = this._snapXY(data.apptX, data.apptY, ZmCalColView._SNAP_MINUTES);
+        var colSnap  = this._snapXY(data.apptX + data.apptOffset.x, data.apptY, ZmCalColView._SNAP_MINUTES);
         data.apptOffset.x = data.apptOffset.x - colSnap.x + leftSnap.x;
 
         // Multi day appt may have its start off the grid.  It's will be truncated
@@ -2349,7 +2348,7 @@ function(data) {
 
         data.disableScroll = true;
      } else {
-        data.snap = this._snapXY(data.apptX + data.apptOffset.x, data.apptY, 15); 	// get orig grid snap
+        data.snap = this._snapXY(data.apptX + data.apptOffset.x, data.apptY, ZmCalColView._SNAP_MINUTES); 	// get orig grid snap
     }
 
     if (data.snap == null) return false;
@@ -2429,7 +2428,7 @@ ZmCalColView.prototype._doApptMove =
 function(data, deltaX, deltaY) {
     // snap new location to grid
     var newDate = null;
-    var snap = data.view._snapXY(data.apptX + data.apptOffset.x + deltaX, data.apptY + deltaY, 15);
+    var snap = data.view._snapXY(data.apptX + data.apptOffset.x + deltaX, data.apptY + deltaY, ZmCalColView._SNAP_MINUTES);
     if (snap == null) {
         if (data.appt.isAllDayEvent()) {
             // For a multi day appt , the start snap may have started or be pushed off the grid.
@@ -2438,7 +2437,7 @@ function(data, deltaX, deltaY) {
             newDate = data.view._createAllDayDateFromIndex(snap.col.index);
         }
     } else {
-        newDate = data.view._getDateFromXY(snap.x, snap.y, 15);
+        newDate = data.view._getDateFromXY(snap.x, snap.y, ZmCalColView._SNAP_MINUTES);
     }
 
     //DBG.println("mouseMove new snap: "+snap.x+","+snap.y+ " data snap: "+data.snap.x+","+data.snap.y);
@@ -2738,17 +2737,17 @@ function(ev) {
 	}
 
 	// snap new location to grid
-	var snap = data.view._snapXY(data.gridX + deltaX, data.gridY + deltaY, 30);
+	var snap = data.view._snapXY(data.gridX + deltaX, data.gridY + deltaY, ZmCalColView._SNAP_MINUTES);
 	if (snap == null) return false;
 
 	var newStart, newEnd;
 
 	if (deltaY >= 0) { // dragging down
-		newStart = data.view._snapXY(data.gridX, data.gridY, 30);
-		newEnd = data.view._snapXY(data.gridX, data.gridY + deltaY, 30, true);
+		newStart = data.view._snapXY(data.gridX, data.gridY, ZmCalColView._SNAP_MINUTES);
+		newEnd = data.view._snapXY(data.gridX, data.gridY + deltaY, ZmCalColView._SNAP_MINUTES, true);
 	} else { // dragging up
-		newEnd = data.view._snapXY(data.gridX, data.gridY, 30);
-		newStart = data.view._snapXY(data.gridX, data.gridY + deltaY, 30);
+		newEnd = data.view._snapXY(data.gridX, data.gridY, ZmCalColView._SNAP_MINUTES);
+		newStart = data.view._snapXY(data.gridX, data.gridY + deltaY, ZmCalColView._SNAP_MINUTES);
 	}
 
 	if (newStart == null || newEnd == null) return false;
@@ -2760,8 +2759,8 @@ function(ev) {
 		data.start = newStart;
 		data.end = newEnd;
 
-		data.startDate = data.view._getDateFromXY(data.start.x, data.start.y, 30, false);
-		data.endDate = data.view._getDateFromXY(data.end.x, data.end.y, 30, false);
+		data.startDate = data.view._getDateFromXY(data.start.x, data.start.y, ZmCalColView._SNAP_MINUTES, false);
+		data.endDate = data.view._getDateFromXY(data.end.x, data.end.y, ZmCalColView._SNAP_MINUTES, false);
 
 		var e = data.newApptDivEl;
 		if (!e) return;
@@ -2794,11 +2793,11 @@ function(ev) {
         var deltaY = mouseEv.docY - data.docY;
 
         if (deltaY >= 0) { // dragging down
-            newStart = data.view._snapXY(data.gridX, data.gridY, 30);
-            newEnd = data.view._snapXY(data.gridX, data.gridY + deltaY, 30, true);
+            newStart = data.view._snapXY(data.gridX, data.gridY, ZmCalColView._SNAP_MINUTES);
+            newEnd = data.view._snapXY(data.gridX, data.gridY + deltaY, ZmCalColView._SNAP_MINUTES, true);
         } else { // dragging up
-            newEnd = data.view._snapXY(data.gridX, data.gridY, 30);
-            newStart = data.view._snapXY(data.gridX, data.gridY + deltaY, 30);
+            newEnd = data.view._snapXY(data.gridX, data.gridY, ZmCalColView._SNAP_MINUTES);
+            newStart = data.view._snapXY(data.gridX, data.gridY + deltaY, ZmCalColView._SNAP_MINUTES);
         }
 
         if (newStart == null || newEnd == null) return false;
@@ -2868,7 +2867,7 @@ function(ev) {
 	}
 
 	// snap new location to grid
-	var snap = data.view._snapXY(data.gridX + deltaX, data.gridY + deltaY, 30);
+	var snap = data.view._snapXY(data.gridX + deltaX, data.gridY + deltaY, ZmCalColView._SNAP_MINUTES);
 	if (snap == null) return false;
 
 	var newStart, newEnd;
