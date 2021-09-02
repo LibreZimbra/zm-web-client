@@ -201,6 +201,7 @@ function(settings) {
     settings.registerSetting("CAL_EXCEPTION_ON_SERIES_TIME_CHANGE",	    {name: "zimbraCalendarKeepExceptionsOnSeriesTimeChange", type:ZmSetting.T_COS, dataType:ZmSetting.D_BOOLEAN, defaultValue: false, isGlobal:true});
     settings.registerSetting("CAL_LOCATION_FIELDS_DISABLED",{name: "zimbraCalendarLocationDisabledFields", type: ZmSetting.T_COS, dataType: ZmSetting.D_STRING, defaultValue: false, isGlobal:true});
     settings.registerSetting("CAL_DEFAULT_ID",				{name:"zimbraPrefDefaultCalendarId", type:ZmSetting.T_PREF, dataType:ZmSetting.D_STRING, defaultValue: "10"});
+	settings.registerSetting("CAL_RESOLUTION",				{name:"zimbraPrefCalendarResolution", type:ZmSetting.T_METADATA, dataType:ZmSetting.D_INT, isImplicit:true, section:ZmSetting.M_IMPLICIT});
 };
 
 ZmCalendarApp.prototype._registerPrefs =
@@ -240,7 +241,8 @@ function() {
 				ZmSetting.CAL_SHOW_PAST_DUE_REMINDERS,
 				ZmSetting.CAL_SHOW_CALENDAR_WEEK,
                 ZmSetting.CAL_DEFAULT_APPT_DURATION,
-                ZmSetting.CAL_LOCATION_FIELDS_DISABLED
+                ZmSetting.CAL_LOCATION_FIELDS_DISABLED,
+				ZmSetting.CAL_RESOLUTION
 			],
 			manageDirty: true,
 			createView: function(parent, section, controller) {
@@ -426,6 +428,13 @@ function() {
 		displayContainer:	ZmPref.TYPE_SELECT,
 		displayOptions:		["30","60","90","120"],
 		options:			["1800", "3600", "5400", "7200"]
+	});
+
+	ZmPref.registerPref("CAL_RESOLUTION", {
+		displayName:		ZmMsg.defaultApptDuration,
+		displayContainer:	ZmPref.TYPE_SELECT,
+		displayOptions:		["15","30"],
+		options:			["15", "30"]
 	});
 };
 
