@@ -24,6 +24,18 @@
 ZmCalColView = function(parent, posStyle, controller, dropTgt, view, numDays, scheduleMode, readonly, isInviteMessage, isRight) {
 	if (arguments.length == 0) { return; }
 
+	// ZmCalColView._MINIMUM_APPT_HEIGHT = 22;
+	// ZmCalColView._SNAP_MINUTES = 30;
+	// ZmCalColView._HOUR_HEIGHT = 42;
+
+	ZmCalColView._MINIMUM_APPT_HEIGHT = 15;
+	ZmCalColView._SNAP_MINUTES = 15;
+	ZmCalColView._HOUR_HEIGHT = 84;
+
+	ZmCalColView._HALF_HOUR_HEIGHT = ZmCalColView._HOUR_HEIGHT/2;
+	ZmCalColView._15_MINUTE_HEIGHT = ZmCalColView._HOUR_HEIGHT/4;
+	ZmCalColView._DAY_HEIGHT = ZmCalColView._HOUR_HEIGHT*24;
+
 	view = view || ZmId.VIEW_CAL_DAY;
 	// set before call to parent
 	this._scheduleMode = scheduleMode;
@@ -103,12 +115,6 @@ ZmCalColView._APPT_X_FUDGE = 0; // due to border stuff
 ZmCalColView._APPT_Y_FUDGE = -1; // ditto
 ZmCalColView._APPT_WIDTH_FUDGE = (AjxEnv.isIE ? 0 : 0); // due to border stuff
 ZmCalColView._APPT_HEIGHT_FUDGE = (AjxEnv.isIE ? 0 : 0); // ditto
-
-ZmCalColView._SNAP_MINUTES = 15;
-ZmCalColView._HOUR_HEIGHT = 84;
-ZmCalColView._HALF_HOUR_HEIGHT = ZmCalColView._HOUR_HEIGHT/2;
-ZmCalColView._15_MINUTE_HEIGHT = ZmCalColView._HOUR_HEIGHT/4;
-ZmCalColView._DAY_HEIGHT = ZmCalColView._HOUR_HEIGHT*24;
 
 ZmCalColView._STATUS_FREE       = "F";
 ZmCalColView._STATUS_TENTATIVE  = "T";
@@ -1498,7 +1504,7 @@ function(appt) {
 ZmCalColView.prototype._getBoundsForDate =
 function(d, duration, col) {
 	var durationMinutes = duration / 1000 / 60;
-	durationMinutes = Math.max(durationMinutes, 15);
+	durationMinutes = Math.max(durationMinutes, ZmCalColView._MINIMUM_APPT_HEIGHT);
 	var h = d.getHours();
 	var m = d.getMinutes();
 	if (col == null && !this._scheduleMode) {
@@ -1513,7 +1519,7 @@ function(d, duration, col) {
 ZmCalColView.prototype._getBoundsForCalendar =
 function(d, duration, folderId) {
 	var durationMinutes = duration / 1000 / 60;
-	durationMinutes = Math.max(durationMinutes, 15);
+	durationMinutes = Math.max(durationMinutes, ZmCalColView._MINIMUM_APPT_HEIGHT);
 	var h = d.getHours();
 	var m = d.getMinutes();
 	var col= this._getColForFolderId(folderId);
