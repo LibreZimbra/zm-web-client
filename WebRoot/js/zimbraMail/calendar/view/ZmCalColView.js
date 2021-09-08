@@ -24,13 +24,15 @@
 ZmCalColView = function(parent, posStyle, controller, dropTgt, view, numDays, scheduleMode, readonly, isInviteMessage, isRight) {
 	if (arguments.length == 0) { return; }
 
-	// ZmCalColView._MINIMUM_APPT_HEIGHT = 22;
-	// ZmCalColView._SNAP_MINUTES = 30;
-	// ZmCalColView._HOUR_HEIGHT = 42;
-
-	ZmCalColView._MINIMUM_APPT_HEIGHT = 15;
-	ZmCalColView._SNAP_MINUTES = 15;
-	ZmCalColView._HOUR_HEIGHT = 84;
+	if (appCtxt.get(ZmSetting.CAL_SCALING) == "15") {
+		ZmCalColView._MINIMUM_APPT_HEIGHT = 15;
+		ZmCalColView._SNAP_MINUTES = 15;
+		ZmCalColView._HOUR_HEIGHT = 84;
+	} else {
+		ZmCalColView._MINIMUM_APPT_HEIGHT = 22;
+		ZmCalColView._SNAP_MINUTES = 30;
+		ZmCalColView._HOUR_HEIGHT = 42;
+	}
 
 	ZmCalColView._HALF_HOUR_HEIGHT = ZmCalColView._HOUR_HEIGHT/2;
 	ZmCalColView._15_MINUTE_HEIGHT = ZmCalColView._HOUR_HEIGHT/4;
