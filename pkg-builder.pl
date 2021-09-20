@@ -134,7 +134,6 @@ sub make_package($)
 
    my @cmd = (
       "../zm-pkg-tool/pkg-build.pl",
-      "--out-type=binary",
       "--pkg-name=$pkg_name",
       "--pkg-version=$pkg_info->{_version_ts}",
       "--pkg-release=$pkg_info->{revision}",
