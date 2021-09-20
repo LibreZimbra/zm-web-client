@@ -246,9 +246,7 @@ ZmClientCmdHandler.prototype.execute_get =
 function(cmdStr, searchController, cmdName, cmdArg1 /* ..., cmdArgN */) {
 	if (cmdArg1 && cmdArg1 == "version") {
 		alert("Client Information\n\n" +
-			  "Client Version: " + appCtxt.get(ZmSetting.CLIENT_VERSION) + "\n" +
-			  "Client Release: " + appCtxt.get(ZmSetting.CLIENT_RELEASE) + "\n" +
-			  "    Build Date: " + appCtxt.get(ZmSetting.CLIENT_DATETIME));
+			  "Client Version: " + appCtxt.get(ZmSetting.CLIENT_VERSION));
 	}
 };
 

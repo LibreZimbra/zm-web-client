@@ -350,21 +350,6 @@
                 <isset property="${zimbra.buildinfo.version}"/>
             </not>
         </condition>
-        <condition property="zimbra.buildinfo.release" value="${user.name}">
-            <not>
-                <isset property="${zimbra.buildinfo.release}"/>
-            </not>
-        </condition>
-        <condition property="zimbra.buildinfo.date" value="${DSTAMP}-${TSTAMP}">
-            <not>
-                <isset property="${zimbra.buildinfo.date}"/>
-            </not>
-        </condition>
-        <condition property="zimbra.buildinfo.host" value="${zimbra.server.hostname}">
-            <not>
-                <isset property="${zimbra.buildinfo.host}"/>
-            </not>
-        </condition>
 
         <!-- common filesets -->
         <fileset id="src.props.fileset" dir='${ajax.src.dir}' includes='**/*.properties' />
@@ -850,8 +835,6 @@
                     <fileset dir='${js.dir}' includes='**/ZmSettings.js'/>
                 </copy>
                 <replace file="${settings.file}" token="@buildVersion@" value="${zimbra.buildinfo.version}"/>
-                <replace file="${settings.file}" token="@buildRelease@" value="${zimbra.buildinfo.release}"/>
-                <replace file="${settings.file}" token="@buildDateTime@" value="${DSTAMP}-${TSTAMP}"/>
             </then>
         </if>
     </target>
@@ -1238,9 +1221,7 @@ ext = BeanUtils.cook(ext);
         <mkdir dir="${build.jsapi-inventory.dir}"/>
         <echo file="${build.jsapi-inventory.dir}/manifest.json">
 {
-    "build.version": "${zimbra.buildinfo.version}",
-    "build.release": "${zimbra.buildinfo.release}",
-    "build.date": "${zimbra.buildinfo.date}"
+    "build.version": "${zimbra.buildinfo.version}"
 }
         </echo>
       <java jar="${jsdoctoolkit.dir}/jsrun.jar" fork="true" failonerror="true">
