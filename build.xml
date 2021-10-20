@@ -1,6 +1,10 @@
 <project xmlns:ivy="antlib:org.apache.ivy.ant" name="zm-web-client" default="war">
     <import file="../zm-zcs/ant-global.xml"/>
-    <property name="ajax.dir" location="../zm-ajax" />
+    <condition property="ajax.dir" value="../zm-ajax">
+       <not>
+          <isset property="ajax.dir"/>
+       </not>
+    </condition>
     <property name="ajax.src.dir" location="${ajax.dir}/src" />
 
     <property name="timezones.dir" location="../zm-timezones" />
