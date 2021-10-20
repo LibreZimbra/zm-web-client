@@ -1,5 +1,5 @@
 <project xmlns:ivy="antlib:org.apache.ivy.ant" name="zm-web-client" default="war">
-    <import file="../zm-zcs/ant-global.xml"/>
+    <import file="ant-global.xml"/>
     <condition property="ajax.dir" value="../zm-ajax">
        <not>
           <isset property="ajax.dir"/>
