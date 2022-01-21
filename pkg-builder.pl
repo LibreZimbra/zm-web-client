@@ -76,7 +76,7 @@ my %PKG_GRAPH = (
       revision   => $revision,
       hard_deps  => [],
       soft_deps  => [],
-      other_deps => ["zimbra-store-components"],
+      other_deps => ["zimbra-store-base"],
       replaces   => ["zimbra-store"],
       dir_list   => ['/opt/zimbra/conf/templates/*',
                      '/opt/zimbra/jetty_base/webapps/zimbra/META-INF/*',
